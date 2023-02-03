@@ -4,6 +4,7 @@ SRC		=	src/Game.cpp	\
 			src/Map.cpp	\
 			src/Tile.cpp	\
 			src/Astar.cpp	\
+			src/RawMap.cpp	\
 
 CFLAGS	=	-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
