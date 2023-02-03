@@ -7,23 +7,29 @@
 #pragma once
 
 #include "Node.hpp"
-
-using ProtoMap = std::vector<std::vector<char>>;
-using Vector2f = std::pair<int, int>;
+#include "RawMap.hpp"
+#include <math.h>
 
 class Astar
 {
     public:
-        Astar();
+        Astar(RawMap map, Vector2f start, Vector2f target);
         ~Astar() = default;
 
-        void findPath(ProtoMap& map, Vector2f start, Vector2f target);
+        void findPath();
 
     private:
-        // Node<ProtoMap, Vector2f> m_startNode;
-        // Node<ProtoMap, Vector2f> m_targetNode;
-        // Node<ProtoMap, Vector2f> m_lastNode;
-        // std::vector<Node<ProtoMap, Vector2f>> m_openList;
-        // std::vector<Node<ProtoMap, Vector2f>> m_closedList;
-        // std::pair<int, int> m_endPos;
+        Node<RawMap, Vector2f> m_startNode;
+        Node<RawMap, Vector2f> m_targetNode;
+        Node<RawMap, Vector2f> m_lastNode;
+        std::vector<Node<RawMap, Vector2f>> m_openList;
+        std::vector<Node<RawMap, Vector2f>> m_closedList;
+        std::pair<int, int> m_startPos;
+        std::pair<int, int> m_endPos;
 };
+
+namespace heuristic
+{
+    int manhattanDistance(std::pair<int, int> start, std::pair<int, int> target);
+    int euclideanDistance(std::pair<int, int> start, std::pair<int, int> target);
+}

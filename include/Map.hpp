@@ -40,7 +40,7 @@ class Map : public sf::Drawable
 
         Tile& tileAt(sf::Vector2f position);
 
-        std::vector<std::vector<char>> &getProtoMap();
+        std::vector<std::vector<char>> getProtoMap();
 
     private:
         inline int indexAt(sf::Vector2f position) const;
