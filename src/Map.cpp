@@ -75,18 +75,16 @@ Tile& Map::getTarget()
     return m_target;
 }
 
-std::vector<std::vector<char>> &Map::getProtoMap()
+std::vector<std::vector<char>> Map::getProtoMap()
 {
     m_protoMap.clear();
-
     for (auto y = 0; y < m_height; y += m_tileSize) {
         std::vector<char> line;
         for (auto x = 0; x < m_width; x += m_tileSize) {
             auto tile = m_tileMap[indexAt(sf::Vector2f(x, y))];
-            if (tile.getColor() == sf::Color::White)
-                line.push_back(CASE);
-            else
-                line.push_back(BLOCK);
+            (tile.getColor() == sf::Color::Black)
+            ? line.push_back(BLOCK)
+            : line.push_back(CASE);
         }
         m_protoMap.push_back(line);
     }
