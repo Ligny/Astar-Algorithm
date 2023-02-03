@@ -11,7 +11,6 @@
 
 #include <SFML/Graphics.hpp>
 
-
 #include "Map.hpp"
 #include "Astar.hpp"
 
@@ -31,5 +30,4 @@ class Game
 
         sf::RenderWindow m_window;
         Map m_map;
-        Astar m_astar;
 };
