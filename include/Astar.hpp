@@ -6,30 +6,25 @@
 
 #pragma once
 
-#include "Node.hpp"
-#include "RawMap.hpp"
+#include <queue>
 #include <math.h>
+
+#include "../include/Node.hpp"
 
 class Astar
 {
     public:
-        Astar(RawMap map, Vector2f start, Vector2f target);
-        ~Astar() = default;
+        Astar(std::vector<std::vector<Node>> map, Vector2f start, Vector2f end, Vector2f size);
 
-        void findPath();
-
+        bool isFinish(Vector2f pos);
+        bool isWalkable(Vector2f pos);
+        bool isOutOfBounds(Vector2f pos);
+        std::vector<Node> findPath();
     private:
-        Node<RawMap, Vector2f> m_startNode;
-        Node<RawMap, Vector2f> m_targetNode;
-        Node<RawMap, Vector2f> m_lastNode;
-        std::vector<Node<RawMap, Vector2f>> m_openList;
-        std::vector<Node<RawMap, Vector2f>> m_closedList;
-        std::pair<int, int> m_startPos;
-        std::pair<int, int> m_endPos;
+        std::uint32_t m_width;
+        std::uint32_t m_height;
+        std::vector<std::vector<Node>> m_map;
+        std::vector<Node> m_openList;
+        Vector2f m_start;
+        Vector2f m_end;
 };
-
-namespace heuristic
-{
-    int manhattanDistance(std::pair<int, int> start, std::pair<int, int> target);
-    int euclideanDistance(std::pair<int, int> start, std::pair<int, int> target);
-}

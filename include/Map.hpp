@@ -7,6 +7,7 @@
 #pragma once
 
 #include "iostream"
+#include "array"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
@@ -39,8 +40,9 @@ class Map : public sf::Drawable
         const Tile& operator[](sf::Vector2f position) const;
 
         Tile& tileAt(sf::Vector2f position);
-
-        std::vector<std::vector<char>> getProtoMap();
+    
+        std::uint32_t getWidth() const;
+        std::uint32_t getHeight() const;
 
     private:
         inline int indexAt(sf::Vector2f position) const;
@@ -52,6 +54,4 @@ class Map : public sf::Drawable
         std::vector<Tile> m_tileMap;
         Tile m_start;
         Tile m_target;
-
-        std::vector<std::vector<char>> m_protoMap;
 };
