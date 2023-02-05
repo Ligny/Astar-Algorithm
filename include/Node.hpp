@@ -1,43 +1,31 @@
 /**
  * @ Author: Antoine Deligny
- * @ Create Time: 2023-02-02 18:32:43
+ * @ Create Time: 2023-02-04 21:06:10
  * @ Description:
  */
 
-#pragma once
 
-#include <memory>
-#include <vector>
+#include <iostream>
 
-template<typename T, typename V>
-class Node
+using Vector2f = std::pair<int, int>;
+
+struct Node
 {
-    public:
-        Node(T map, V pos) : m_map(map), m_pos(pos) {};
-        ~Node() = default;
+    Node() {};
+    Node(Vector2f pos, Vector2f parent, float cost, bool walkable)
+        : m_pos(pos), m_parent(parent), m_gCost(cost), m_hCost(cost), m_fCost(cost), isWalkable(walkable)
+    {
+    }
 
-        void setParent(std::shared_ptr<Node<T, V>> parent);
-        void setGCost(int gCost);
-        void setHCost(int hCost);
-        void setFCost(int fCost);
-        void setPos(V pos);
-        void setMap(T map);
-
-        std::shared_ptr<Node<T, V>> getParent() const;
-        int getGCost() const;
-        int getHCost() const;
-        int getFCost() const;
-        V getPos() const;
-        T getMap() const;
-
-        bool operator==(const Node<T, V>& other) const;
-        bool operator!=(const Node<T, V>& other) const;
-
-    private:
-        std::shared_ptr<Node<T, V>> m_parent;
-        int m_gCost;
-        int m_hCost;
-        int m_fCost;
-        V m_pos;
-        T m_map;
+    Vector2f m_pos;
+    Vector2f m_parent;
+    float m_gCost;
+    float m_hCost;
+    float m_fCost;
+    bool isWalkable;
 };
+
+inline bool operator<(const Node &a, const Node &b)
+{
+    return a.m_fCost > b.m_fCost;
+}
