@@ -19,7 +19,7 @@ class Astar
         bool isFinish(Vector2f pos);
         bool isWalkable(Vector2f pos);
         bool isOutOfBounds(Vector2f pos);
-        std::vector<Node> findPath();
+        std::vector<Node> findPath(int direction_nbr);
     private:
         std::uint32_t m_width;
         std::uint32_t m_height;
@@ -27,4 +27,9 @@ class Astar
         std::vector<Node> m_openList;
         Vector2f m_start;
         Vector2f m_end;
+        std::vector<Vector2f> m_directions = {
+            {0, -1}, {1, 0}, {0, 1}, {-1, 0},
+            {-1, -1}, {1, -1}, {1, 1}, {-1, 1}
+        };
+        std::uint16_t m_nbrDirections = 8;
 };

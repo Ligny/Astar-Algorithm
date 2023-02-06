@@ -14,9 +14,6 @@
 
 #include "Tile.hpp"
 
-const char BLOCK = 'o';
-const char CASE = '.';
-
 class Map : public sf::Drawable
 {
     public:

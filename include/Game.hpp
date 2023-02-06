@@ -30,4 +30,6 @@ class Game
 
         sf::RenderWindow m_window;
         Map m_map;
+
+        sf::Text m_diagonalText;
 };

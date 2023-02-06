@@ -4,6 +4,7 @@
  * @ Description:
  */
 
+#pragma once
 
 #include <iostream>
 
