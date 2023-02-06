@@ -27,7 +27,8 @@ sf::Color Tile::getColor() const
     return m_shape.getFillColor();
 }
 
-void Tile::draw(sf::RenderTarget& target, sf::RenderStates states) const{
+void Tile::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
     states.transform *= getTransform();
     target.draw(m_shape, states);
 }

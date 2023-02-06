@@ -5,6 +5,13 @@
  */
 
 #include "../../include/Game.hpp"
+#include <SFML/Window/Mouse.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/System/Clock.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Window/Keyboard.hpp>
 
 Game::Game(int width, int height, const std::string& title, std::uint16_t tileSize)
     : m_window(sf::VideoMode(width, height), title),
@@ -16,6 +23,15 @@ void Game::run(sf::Vector2f start, sf::Vector2f target)
 {
     m_map.setStart(start, sf::Color::Green);
     m_map.setTarget(target, sf::Color::Red);
+    sf::Font font;
+    if (!font.loadFromFile("Sansation.ttf"))
+        std::cout << "Error: font not found" << std::endl;
+    sf::Text text("hello", font);
+    text.setCharacterSize(30);
+    text.setStyle(sf::Text::Bold);
+    text.setFillColor(sf::Color::Red);
+    text.setFont(font);
+    m_diagonalText = text;
     while (m_window.isOpen()) {
         event();
         display();
@@ -26,6 +42,7 @@ void Game::display()
 {
     m_window.clear();
     m_window.draw(m_map);
+    m_window.draw(m_diagonalText);
     m_window.display();
 }
 
@@ -76,7 +93,7 @@ void Game::keyEvent(sf::Keyboard::Key& key)
             {m_map.getTarget().getPosition().x / m_map.getTileSize(), m_map.getTarget().getPosition().y / m_map.getTileSize()},
             {m_map.getWidth() / m_map.getTileSize(), m_map.getHeight() / m_map.getTileSize()}
         );
-        auto res = astar.findPath();
+        auto res = astar.findPath(4);
         if (res.empty()) {
             std::cout << "Path not found" << std::endl;
         } else {

@@ -27,8 +27,9 @@ bool Astar::isOutOfBounds(Vector2f pos)
     return pos.first < 0 || pos.first >= m_width || pos.second < 0 || pos.second >= m_height;
 };
 
-std::vector<Node> Astar::findPath()
+std::vector<Node> Astar::findPath(int direction_nbr)
 {
+    m_nbrDirections = direction_nbr;
     int x = m_start.first;
     int y = m_start.second;
     m_map[x][y].m_gCost = 0.0f;
@@ -53,23 +54,20 @@ std::vector<Node> Astar::findPath()
             return path;
         }
 
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                if (i == 0 && j == 0)
-                    continue;
-                Vector2f neighbour = {current.m_pos.first + i, current.m_pos.second + j};
-                if (isOutOfBounds(neighbour) || !isWalkable(neighbour))
-                    continue;
-                float gCost = current.m_gCost + sqrt(i * i + j * j);
-                float hCost = sqrt((neighbour.first - m_end.first) * (neighbour.first - m_end.first) + (neighbour.second - m_end.second) * (neighbour.second - m_end.second));
-                float fCost = gCost + hCost;
-                if (fCost < m_map[neighbour.first][neighbour.second].m_fCost) {
-                    m_map[neighbour.first][neighbour.second].m_fCost = fCost;
-                    m_map[neighbour.first][neighbour.second].m_gCost = gCost;
-                    m_map[neighbour.first][neighbour.second].m_hCost = hCost;
-                    m_map[neighbour.first][neighbour.second].m_parent = current.m_pos;
-                    m_openList.emplace_back(m_map[neighbour.first][neighbour.second]);
-                }
+        for (int i = 0; i < m_nbrDirections; i++) {
+            auto dir = m_directions[i];
+            Vector2f newPos = {current.m_pos.first + dir.first, current.m_pos.second + dir.second};
+            if (isOutOfBounds(newPos) || !isWalkable(newPos)) {
+                continue;
+            }
+
+            float newGCost = current.m_gCost + 1.0f;
+            if (newGCost < m_map[newPos.first][newPos.second].m_gCost) {
+                m_map[newPos.first][newPos.second].m_gCost = newGCost;
+                m_map[newPos.first][newPos.second].m_hCost = sqrt(pow(newPos.first - m_end.first, 2) + pow(newPos.second - m_end.second, 2));
+                m_map[newPos.first][newPos.second].m_fCost = m_map[newPos.first][newPos.second].m_gCost + m_map[newPos.first][newPos.second].m_hCost;
+                m_map[newPos.first][newPos.second].m_parent = current.m_pos;
+                m_openList.emplace_back(m_map[newPos.first][newPos.second]);
             }
         }
     }
