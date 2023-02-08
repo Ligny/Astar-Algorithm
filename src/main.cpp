@@ -9,8 +9,8 @@
 int main(int argc, char *argv[])
 {
     try {
-        Game game(1280, 720, "SFML window", 40);
-        game.run({0, 0}, {1240, 680});
+        Game game(32, 18, "SFML window", 40);
+        game.run({0, 0}, {0, 3});
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
         return EXIT_FAILURE;
