@@ -35,6 +35,8 @@ class Map : public sf::Drawable
         Tile& operator[](sf::Vector2f position);
         const Tile& operator[](sf::Vector2f position) const;
 
+        bool isInMap(sf::Vector2f position);
+
     private:
         inline int indexAt(sf::Vector2f position) const;
         void clear(sf::Color color, bool partial = false);

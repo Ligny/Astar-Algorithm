@@ -16,8 +16,10 @@ class ActivateText : public sf::Drawable, public sf::Transformable
         ActivateText() = default;
 
         void setActive(bool active);
+        bool getActive() const;
 
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+        bool isInBounds(sf::Vector2f position) const;
 
     private:
         sf::Text m_text;
