@@ -5,33 +5,29 @@
  */
 
 #include "../../include/Game.hpp"
-#include <SFML/Window/Mouse.hpp>
-#include <SFML/Window/Event.hpp>
-#include <SFML/Graphics/Font.hpp>
-#include <SFML/Graphics/Text.hpp>
-#include <SFML/System/Clock.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Window/Keyboard.hpp>
+#include <SFML/Window.hpp>
 
 Game::Game(int width, int height, const std::string& title, std::uint16_t tileSize)
-    : m_window(sf::VideoMode(width, height), title),
+    : m_window(sf::VideoMode((width * tileSize) + 300, height * tileSize), title),
     m_map(Map({width, height}, tileSize))
 {
+};
+
+void Game::setUp(sf::Vector2f start, sf::Vector2f target)
+{
+    m_map.setStart(start, sf::Color::Green);
+    m_map.setTarget(target, sf::Color::Red);
+
+    if (!m_font.loadFromFile("Sansation.ttf"))
+        std::cout << "Error loading font" << std::endl;
+    sf::Text temp_text = sf::Text(" - Diagonal", m_font);
+    temp_text.setPosition((m_map.getWidth() * m_map.getTileSize()) + 100, 70);
+    m_activateTexts.push_back(ActivateText(temp_text, true));
 }
 
 void Game::run(sf::Vector2f start, sf::Vector2f target)
 {
-    m_map.setStart(start, sf::Color::Green);
-    m_map.setTarget(target, sf::Color::Red);
-    sf::Font font;
-    if (!font.loadFromFile("Sansation.ttf"))
-        std::cout << "Error: font not found" << std::endl;
-    sf::Text text("hello", font);
-    text.setCharacterSize(30);
-    text.setStyle(sf::Text::Bold);
-    text.setFillColor(sf::Color::Red);
-    text.setFont(font);
-    m_diagonalText = text;
+    setUp(start, target);
     while (m_window.isOpen()) {
         event();
         display();
@@ -42,14 +38,14 @@ void Game::display()
 {
     m_window.clear();
     m_window.draw(m_map);
-    m_window.draw(m_diagonalText);
+    m_window.draw(m_activateTexts[0]);
     m_window.display();
 }
 
 void Game::mouseEvent()
 {
     auto position = sf::Mouse::getPosition(m_window);
-    sf::Vector2f mousePosition(position.x, position.y);
+    sf::Vector2f mousePosition{(float)position.x / m_map.getTileSize(), (float)position.y / m_map.getTileSize()};
 
     auto tile = m_map[mousePosition];
     if (tile.getColor() == sf::Color::White) {
@@ -79,7 +75,7 @@ std::vector<std::vector<Node>> getProtoMap(const int width, const int height, co
 void Game::keyEvent(sf::Keyboard::Key& key)
 {
     auto position = sf::Mouse::getPosition(m_window);
-    sf::Vector2f mousePosition(position.x, position.y);
+    sf::Vector2f mousePosition{(float)position.x / m_map.getTileSize(), (float)position.y / m_map.getTileSize()};
 
     if (key == sf::Keyboard::S) {
         m_map.setStart(mousePosition, sf::Color::Green);

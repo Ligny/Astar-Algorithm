@@ -5,6 +5,7 @@
  */
 
 #include "../../include/Map.hpp"
+#include <math.h>
 
 
 Map::Map(std::pair<std::uint32_t, std::uint32_t> size, std::uint16_t tileSize)
@@ -12,9 +13,9 @@ Map::Map(std::pair<std::uint32_t, std::uint32_t> size, std::uint16_t tileSize)
     m_height(size.second),
     m_tileSize(tileSize)
 {
-    for (auto y = 0; y <= m_height; y += m_tileSize) {
-        for (auto x = 0; x < m_width; x += m_tileSize) {
-            m_tileMap.push_back(Tile(sf::IntRect(x, y, m_tileSize, m_tileSize), sf::Color::White));
+    for (auto y = 0; y <= m_height; y++) {
+        for (auto x = 0; x < m_width; x++) {
+            m_tileMap.push_back(Tile(sf::IntRect(x * m_tileSize, y * m_tileSize, m_tileSize, m_tileSize), sf::Color::White));
         }
     }
 }
@@ -35,35 +36,34 @@ const Tile& Map::operator[](sf::Vector2f position) const
 
 inline int Map::indexAt(sf::Vector2f position) const
 {
-    auto positionX = static_cast<int>(position.x);
-    auto positionY = static_cast<int>(position.y);
+    return (trunc(position.y) * m_width) + trunc(position.x);
+}
 
-    positionX = (positionX - (positionX % m_tileSize)) / m_tileSize;
-    positionY = (positionY - (positionY % m_tileSize)) / m_tileSize;
-
-    return (positionY*(m_width / m_tileSize) + positionX);
+void Map::clear(sf::Color color, bool partial)
+{
+    for (auto& tile : m_tileMap)
+        if (partial && tile.getColor() == color)
+            tile.setColor(sf::Color::White);
+        else if (!partial)
+            tile.setColor(sf::Color::White);
 }
 
 void Map::setStart(sf::Vector2f position, sf::Color color)
 {
-    for (auto& tile : m_tileMap)
-        if (tile.getColor() == color)
-            tile.setColor(sf::Color::White);
+    clear(color, true);
     auto tile = m_tileMap[indexAt(position)];
     tile.setColor(color);
     m_start = tile;
-    (*this)[m_start.getPosition()] = m_start;
+    (*this)[position] = m_start;
 }
 
 void Map::setTarget(sf::Vector2f position, sf::Color color)
 {
-    for (auto& tile : m_tileMap)
-        if (tile.getColor() == color)
-            tile.setColor(sf::Color::White);
+    clear(color, true);
     auto tile = m_tileMap[indexAt(position)];
     tile.setColor(color);
     m_target = tile;
-    (*this)[m_target.getPosition()] = m_target;
+    (*this)[position] = m_target;
 }
 
 Tile& Map::getStart()
