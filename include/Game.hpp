@@ -13,6 +13,7 @@
 
 #include "Map.hpp"
 #include "Astar.hpp"
+#include "ActivateText.hpp"
 
 class Game
 {
@@ -23,6 +24,7 @@ class Game
     
     private:
         void display();
+        void setUp(sf::Vector2f start, sf::Vector2f target);
         void event();
 
         void mouseEvent();
@@ -31,5 +33,6 @@ class Game
         sf::RenderWindow m_window;
         Map m_map;
 
-        sf::Text m_diagonalText;
+        sf::Font m_font;
+        std::vector<ActivateText> m_activateTexts;
 };
