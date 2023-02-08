@@ -71,4 +71,5 @@ std::vector<Node> Astar::findPath(int direction_nbr)
             }
         }
     }
+    return {};
 }
