@@ -15,7 +15,11 @@ ActivateText::ActivateText(sf::Text text, bool active)
     m_rect.setFillColor(sf::Color::Black);
     m_rect.setOutlineColor(sf::Color::White);
     m_rect.setOutlineThickness(1.6f);
-    setActive(true);
+}
+
+bool ActivateText::isInBounds(sf::Vector2f position) const
+{
+    return m_rect.getGlobalBounds().contains(position);
 }
 
 void ActivateText::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -37,4 +41,9 @@ void ActivateText::setActive(bool active)
         m_text.setFillColor(sf::Color::White);
     }
     m_active = active;
+}
+
+bool ActivateText::getActive() const
+{
+    return m_active;
 }

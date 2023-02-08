@@ -22,7 +22,7 @@ void Game::setUp(sf::Vector2f start, sf::Vector2f target)
         std::cout << "Error loading font" << std::endl;
     sf::Text temp_text = sf::Text(" - Diagonal", m_font);
     temp_text.setPosition((m_map.getWidth() * m_map.getTileSize()) + 100, 70);
-    m_activateTexts.push_back(ActivateText(temp_text, true));
+    m_activateTexts.push_back(ActivateText(temp_text, false));
 }
 
 void Game::run(sf::Vector2f start, sf::Vector2f target)
@@ -45,13 +45,18 @@ void Game::display()
 void Game::mouseEvent()
 {
     auto position = sf::Mouse::getPosition(m_window);
+    sf::Vector2f other(position.x, position.y);
     sf::Vector2f mousePosition{(float)position.x / m_map.getTileSize(), (float)position.y / m_map.getTileSize()};
 
+    for (auto& text : m_activateTexts) {
+        if (text.isInBounds(other))
+            text.setActive(!text.getActive());
+    }
     auto tile = m_map[mousePosition];
-    if (tile.getColor() == sf::Color::White) {
+    if (tile.getColor() == sf::Color::White && m_map.isInMap(mousePosition)) {
         tile.setColor(sf::Color::Black);
         m_map[mousePosition] = tile;
-    } else if (tile.getColor() == sf::Color::Black) {
+    } else if (tile.getColor() == sf::Color::Black && m_map.isInMap(mousePosition)) {
         tile.setColor(sf::Color::White);
         m_map[mousePosition] = tile;
     }
@@ -77,9 +82,9 @@ void Game::keyEvent(sf::Keyboard::Key& key)
     auto position = sf::Mouse::getPosition(m_window);
     sf::Vector2f mousePosition{(float)position.x / m_map.getTileSize(), (float)position.y / m_map.getTileSize()};
 
-    if (key == sf::Keyboard::S) {
+    if (key == sf::Keyboard::S && m_map.isInMap(mousePosition)) {
         m_map.setStart(mousePosition, sf::Color::Green);
-    } else if (key == sf::Keyboard::T) {
+    } else if (key == sf::Keyboard::T && m_map.isInMap(mousePosition)) {
         m_map.setTarget(mousePosition, sf::Color::Red);
     } else if (key == sf::Keyboard::Enter) {
         std::cout << m_map.getStart().getPosition().x / m_map.getTileSize() << " " << m_map.getStart().getPosition().y / m_map.getTileSize() << std::endl;
@@ -87,7 +92,7 @@ void Game::keyEvent(sf::Keyboard::Key& key)
             getProtoMap(m_map.getWidth(), m_map.getHeight(), m_map.getTileSize()),
             {m_map.getStart().getPosition().x / m_map.getTileSize(), m_map.getStart().getPosition().y / m_map.getTileSize()},
             {m_map.getTarget().getPosition().x / m_map.getTileSize(), m_map.getTarget().getPosition().y / m_map.getTileSize()},
-            {m_map.getWidth() / m_map.getTileSize(), m_map.getHeight() / m_map.getTileSize()}
+            {m_map.getWidth(), m_map.getHeight()}
         );
         auto res = astar.findPath(4);
         if (res.empty()) {

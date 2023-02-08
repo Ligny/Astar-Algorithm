@@ -96,3 +96,8 @@ std::uint32_t Map::getHeight() const
 {
     return m_height;
 }
+
+bool Map::isInMap(sf::Vector2f position)
+{
+    return position.x >= 0 && position.x < m_width && position.y >= 0 && position.y < m_height;
+}

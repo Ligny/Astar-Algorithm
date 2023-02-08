@@ -9,6 +9,10 @@
 Astar::Astar(std::vector<std::vector<Node>> map, Vector2f start, Vector2f end, Vector2f size)
 : m_map(map), m_start(start), m_end(end), m_width(size.first), m_height(size.second)
 {
+    std::cout << "Start : " << m_start.first << " " << m_start.second << std::endl;
+    std::cout << "End : " << m_end.first << " " << m_end.second << std::endl;
+    std::cout << "Width : " << m_width << std::endl;
+    std::cout << "Height : " << m_height << std::endl;
 };
 
 
