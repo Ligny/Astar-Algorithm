@@ -20,18 +20,10 @@ void Game::setUp(sf::Vector2f start, sf::Vector2f target)
 
     if (!m_font.loadFromFile("Sansation.ttf"))
         std::cout << "Error loading font" << std::endl;
-    sf::Text temp_text = sf::Text(" - Diagonal", m_font);
-    temp_text.setPosition((m_map.getWidth() * m_map.getTileSize()) + 75, 70);
 
-    sf::Text temp_text1 = sf::Text(" - Start", m_font);
-    temp_text1.setPosition((m_map.getWidth() * m_map.getTileSize()) + 75, 210);
-
-    sf::Text temp_text2 = sf::Text(" - Reset", m_font);
-    temp_text2.setPosition((m_map.getWidth() * m_map.getTileSize()) + 75, 350);
-
-    m_activateTexts.push_back(ActivateText(temp_text, false));
-    m_activateTexts.push_back(ActivateText(temp_text1, false));
-    m_activateTexts.push_back(ActivateText(temp_text2, false));
+    m_buttons.push_back(Button(sf::Text("Diagonal", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 75, 70}));
+    m_buttons.push_back(Button(sf::Text("Reset", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 75, 210}));
+    m_buttons.push_back(Button(sf::Text("Start", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 75, 350}));
 }
 
 void Game::run(sf::Vector2f start, sf::Vector2f target)
@@ -50,15 +42,15 @@ void Game::display()
     std::string pos = "Start\nx: " + std::to_string((int)m_map.getStart().getPosition().x / m_map.getTileSize()) + " y: " + std::to_string((int)m_map.getStart().getPosition().y / m_map.getTileSize());
     sf::Text tot(pos, m_font);
     tot.setFillColor(sf::Color::Green);
-    tot.setPosition((m_map.getWidth() * m_map.getTileSize()) + 30, 500);
+    tot.setPosition((m_map.getWidth() * m_map.getTileSize()) + 50, 500);
     std::string pos1 = "Target\nx: " + std::to_string((int)m_map.getTarget().getPosition().x / m_map.getTileSize()) + " y: " + std::to_string((int)m_map.getTarget().getPosition().y / m_map.getTileSize());
     sf::Text tat(pos1, m_font);
     tat.setFillColor(sf::Color::Red);
-    tat.setPosition((m_map.getWidth() * m_map.getTileSize()) + 30, 600);
+    tat.setPosition((m_map.getWidth() * m_map.getTileSize()) + 50, 600);
     m_window.draw(tot);
     m_window.draw(tat);
-    for (auto& text : m_activateTexts)
-        m_window.draw(text);
+    for (auto& button : m_buttons)
+        m_window.draw(button);
     m_window.display();
 }
 
@@ -68,7 +60,7 @@ void Game::mouseEvent()
     sf::Vector2f other(position.x, position.y);
     sf::Vector2f mousePosition{(float)position.x / m_map.getTileSize(), (float)position.y / m_map.getTileSize()};
 
-    for (auto& text : m_activateTexts) {
+    for (auto& text : m_buttons) {
         if (text.isInBounds(other))
             text.setActive(!text.getActive());
     }

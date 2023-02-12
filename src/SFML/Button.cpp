@@ -4,32 +4,33 @@
  * @ Description:
  */
 
-#include "../../include/ActivateText.hpp"
+#include "../../include/Button.hpp"
 #include <iostream>
 
-ActivateText::ActivateText(sf::Text text, bool active)
-    : m_active(active), m_text(text)
+Button::Button(sf::Text text, sf::Vector2i pos, button_type_t type)
+    : m_active(false), m_text(text)
 {
-    m_rect = sf::RectangleShape(sf::Vector2f(m_text.getGlobalBounds().width + 10, m_text.getGlobalBounds().height + 10));
-    m_rect.setPosition(m_text.getPosition());
-    m_rect.setFillColor(sf::Color::Black);
-    m_rect.setOutlineColor(sf::Color::White);
+    m_text.setPosition(pos.x, pos.y);
+    m_text.setStyle(sf::Text::Bold);
+    m_rect = sf::RectangleShape(sf::Vector2f(m_text.getGlobalBounds().width + 50, m_text.getGlobalBounds().height + 50));
+    m_rect.setPosition({m_text.getPosition().x - 25, m_text.getPosition().y - 25});
     m_rect.setOutlineThickness(1.6f);
+    setActive(false);
 }
 
-bool ActivateText::isInBounds(sf::Vector2f position) const
+bool Button::isInBounds(sf::Vector2f position) const
 {
     return m_rect.getGlobalBounds().contains(position);
 }
 
-void ActivateText::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     states.transform *= getTransform();
     target.draw(m_rect, states);
     target.draw(m_text, states);
 }
 
-void ActivateText::setActive(bool active)
+void Button::setActive(bool active)
 {
     if (active) {
         m_rect.setFillColor(sf::Color::White);
@@ -43,7 +44,7 @@ void ActivateText::setActive(bool active)
     m_active = active;
 }
 
-bool ActivateText::getActive() const
+bool Button::getActive() const
 {
     return m_active;
 }
