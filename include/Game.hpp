@@ -27,14 +27,17 @@ class Game
 
         void event();
         void mouseEvent();
+        void launchAlgorithm();
         void keyEvent(sf::Keyboard::Key& key);
 
         void setUp(sf::Vector2f start, sf::Vector2f target);
-        void setButton();
+
+        std::vector<std::vector<Node>> makeProtoMap(const int width, const int height);
 
         sf::RenderWindow m_window;
         Map m_map;
 
         sf::Font m_font;
         std::vector<Button> m_buttons;
+        bool m_isDiagonal;
 };

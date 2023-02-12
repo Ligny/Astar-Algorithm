@@ -9,7 +9,8 @@
 
 Game::Game(int width, int height, const std::string& title, std::uint16_t tileSize)
     : m_window(sf::VideoMode((width * tileSize) + 300, height * tileSize), title),
-    m_map(Map({width, height}, tileSize))
+    m_map(Map({width, height}, tileSize)),
+    m_isDiagonal(false)
 {
 };
 
@@ -18,11 +19,10 @@ void Game::setUp(sf::Vector2f start, sf::Vector2f target)
     m_map.setStart(start, sf::Color::Green);
     m_map.setTarget(target, sf::Color::Red);
 
-    if (!m_font.loadFromFile("Sansation.ttf"))
+    if (!m_font.loadFromFile("ressources/Sansation.ttf"))
         std::cout << "Error loading font" << std::endl;
 
     m_buttons.push_back(Button(sf::Text("Diagonal", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 75, 70}, button_type_t::DIAGONAL));
-    m_buttons.push_back(Button(sf::Text("Reset", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 75, 210}, button_type_t::RESET));
     m_buttons.push_back(Button(sf::Text("Start", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 75, 350}, button_type_t::START));
 }
 
@@ -54,15 +54,42 @@ void Game::display()
     m_window.display();
 }
 
+void Game::launchAlgorithm()
+{
+    Astar astar(
+        makeProtoMap(m_map.getWidth(), m_map.getHeight()),
+        {m_map.getStart().getPosition().x / m_map.getTileSize(), m_map.getStart().getPosition().y / m_map.getTileSize()},
+        {m_map.getTarget().getPosition().x / m_map.getTileSize(), m_map.getTarget().getPosition().y / m_map.getTileSize()},
+        {m_map.getWidth(), m_map.getHeight()}
+    );
+    auto res = astar.findPath((m_isDiagonal) ? 8 : 4);
+    if (res.empty()) {
+        std::cout << "Path not found" << std::endl;
+    } else {
+        std::cout << "Path found" << std::endl;
+        for (auto& node : res) {
+            std::cout << node.m_pos.first << " " << node.m_pos.second << std::endl;
+        }
+    }
+}
+
 void Game::mouseEvent()
 {
     auto position = sf::Mouse::getPosition(m_window);
-    sf::Vector2f other(position.x, position.y);
     sf::Vector2f mousePosition{(float)position.x / m_map.getTileSize(), (float)position.y / m_map.getTileSize()};
 
-    for (auto& text : m_buttons) {
-        if (text.isInBounds(other))
-            text.setActive(!text.getActive());
+    for (auto& button : m_buttons) {
+        if (button.isInBounds((sf::Vector2f)position)) {
+            button.setActive(!button.getActive());
+        } if (button.getType() == button_type_t::START && button.getActive()) {
+            button.setString("Reset");
+            button.setType(button_type_t::RESET);
+            launchAlgorithm();
+        } if (button.getType() == button_type_t::RESET && !button.getActive()) {
+            button.setString("Start");
+            button.setType(button_type_t::START);
+        } if (button.getType() == button_type_t::DIAGONAL)
+            m_isDiagonal = button.getActive();
     }
     auto tile = m_map[mousePosition];
     if (tile.getColor() == sf::Color::White && m_map.isInMap(mousePosition)) {
@@ -74,7 +101,7 @@ void Game::mouseEvent()
     }
 }
 
-std::vector<std::vector<Node>> getProtoMap(const int width, const int height, const int tileSize)
+std::vector<std::vector<Node>> Game::makeProtoMap(const int width, const int height)
 {
     std::vector<std::vector<Node>> map;
     for (auto y = 0; y < height; y++) {
@@ -92,27 +119,10 @@ void Game::keyEvent(sf::Keyboard::Key& key)
     auto position = sf::Mouse::getPosition(m_window);
     sf::Vector2f mousePosition{(float)position.x / m_map.getTileSize(), (float)position.y / m_map.getTileSize()};
 
-    if (key == sf::Keyboard::S && m_map.isInMap(mousePosition)) {
+    if (key == sf::Keyboard::S && m_map.isInMap(mousePosition))
         m_map.setStart(mousePosition, sf::Color::Green);
-    } else if (key == sf::Keyboard::T && m_map.isInMap(mousePosition)) {
+    else if (key == sf::Keyboard::T && m_map.isInMap(mousePosition))
         m_map.setTarget(mousePosition, sf::Color::Red);
-    } else if (key == sf::Keyboard::Enter) {
-        Astar astar(
-            getProtoMap(m_map.getWidth(), m_map.getHeight(), m_map.getTileSize()),
-            {m_map.getStart().getPosition().x / m_map.getTileSize(), m_map.getStart().getPosition().y / m_map.getTileSize()},
-            {m_map.getTarget().getPosition().x / m_map.getTileSize(), m_map.getTarget().getPosition().y / m_map.getTileSize()},
-            {m_map.getWidth(), m_map.getHeight()}
-        );
-        auto res = astar.findPath(4);
-        if (res.empty()) {
-            std::cout << "Path not found" << std::endl;
-        } else {
-            std::cout << "Path found" << std::endl;
-            for (auto& node : res) {
-                std::cout << node.m_pos.first << " " << node.m_pos.second << std::endl;
-            }
-        }
-    }
 }
 
 void Game::event()

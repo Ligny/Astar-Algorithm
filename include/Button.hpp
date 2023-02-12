@@ -24,6 +24,11 @@ class Button : public sf::Drawable, public sf::Transformable
         void setActive(bool active);
         bool getActive() const;
 
+        void setType(button_type_t type);
+        button_type_t getType() const;
+
+        void setString(std::string new_txt);
+
         virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
         bool isInBounds(sf::Vector2f position) const;
 
@@ -32,4 +37,5 @@ class Button : public sf::Drawable, public sf::Transformable
         bool m_active;
         sf::Font m_font;
         sf::RectangleShape m_rect;
+        button_type_t m_type;
 };

@@ -8,7 +8,7 @@
 #include <iostream>
 
 Button::Button(sf::Text text, sf::Vector2i pos, button_type_t type)
-    : m_active(false), m_text(text)
+    : m_active(false), m_text(text), m_type(type)
 {
     m_text.setPosition(pos.x, pos.y);
     m_text.setStyle(sf::Text::Bold);
@@ -34,7 +34,7 @@ void Button::setActive(bool active)
 {
     if (active) {
         m_rect.setFillColor(sf::Color::White);
-        m_rect.setOutlineColor(sf::Color::Black);
+        m_rect.setOutlineColor(sf::Color::White);
         m_text.setFillColor(sf::Color::Black);
     } else {
         m_rect.setFillColor(sf::Color::Black);
@@ -47,4 +47,23 @@ void Button::setActive(bool active)
 bool Button::getActive() const
 {
     return m_active;
+}
+
+void Button::setType(button_type_t type)
+{
+    m_type = type;
+}
+
+button_type_t Button::getType() const
+{
+    return m_type;
+}
+
+void Button::setString(std::string new_txt)
+{
+    m_text.setString(new_txt);
+    m_rect = sf::RectangleShape(sf::Vector2f(m_text.getGlobalBounds().width + 50, m_text.getGlobalBounds().height + 50));
+    m_rect.setPosition({m_text.getPosition().x - 25, m_text.getPosition().y - 25});
+    m_rect.setOutlineThickness(1.6f);
+    setActive(m_active);
 }
