@@ -21,9 +21,9 @@ void Game::setUp(sf::Vector2f start, sf::Vector2f target)
     if (!m_font.loadFromFile("Sansation.ttf"))
         std::cout << "Error loading font" << std::endl;
 
-    m_buttons.push_back(Button(sf::Text("Diagonal", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 75, 70}));
-    m_buttons.push_back(Button(sf::Text("Reset", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 75, 210}));
-    m_buttons.push_back(Button(sf::Text("Start", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 75, 350}));
+    m_buttons.push_back(Button(sf::Text("Diagonal", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 75, 70}, button_type_t::DIAGONAL));
+    m_buttons.push_back(Button(sf::Text("Reset", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 75, 210}, button_type_t::RESET));
+    m_buttons.push_back(Button(sf::Text("Start", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 75, 350}, button_type_t::START));
 }
 
 void Game::run(sf::Vector2f start, sf::Vector2f target)

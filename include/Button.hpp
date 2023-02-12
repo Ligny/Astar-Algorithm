@@ -9,14 +9,14 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
+typedef enum button_type {
+    DIAGONAL,
+    START,
+    RESET,
+} button_type_t;
+
 class Button : public sf::Drawable, public sf::Transformable
 {
-    typedef enum button_type {
-        DIAGONAL,
-        START,
-        RESET,
-    } button_type_t;
-
     public:
         explicit Button(sf::Text text, sf::Vector2i pos, button_type_t type);
         Button() = default;
