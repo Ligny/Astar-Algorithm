@@ -13,7 +13,7 @@
 
 #include "Map.hpp"
 #include "Astar.hpp"
-#include "ActivateText.hpp"
+#include "Button.hpp"
 
 class Game
 {
@@ -24,15 +24,17 @@ class Game
     
     private:
         void display();
-        void setUp(sf::Vector2f start, sf::Vector2f target);
-        void event();
 
+        void event();
         void mouseEvent();
         void keyEvent(sf::Keyboard::Key& key);
+
+        void setUp(sf::Vector2f start, sf::Vector2f target);
+        void setButton();
 
         sf::RenderWindow m_window;
         Map m_map;
 
         sf::Font m_font;
-        std::vector<ActivateText> m_activateTexts;
+        std::vector<Button> m_buttons;
 };
