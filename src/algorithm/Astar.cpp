@@ -37,6 +37,7 @@ std::vector<Node> Astar::findPath(int direction_nbr)
     int x = m_start.first;
     int y = m_start.second;
     m_map[x][y].m_gCost = 0.0f;
+    std::cout << "pos : " << x << " " << y << std::endl;
     m_map[x][y].m_fCost = 0.0f;
     m_map[x][y].m_hCost = 0.0f;
     m_map[x][y].m_parent = m_start;
