@@ -21,6 +21,8 @@ class Map : public sf::Drawable
         Map(const Map& map);
         Map(std::pair<std::uint32_t, std::uint32_t> size, std::uint16_t tileSize);
 
+        void reset();
+
         void setStart(sf::Vector2f position, sf::Color color);
         void setTarget(sf::Vector2f position, sf::Color color);
         Tile &getStart();
