@@ -34,6 +34,12 @@ const Tile& Map::operator[](sf::Vector2f position) const
     return m_tileMap[indexAt(position)];
 }
 
+void Map::reset()
+{
+    for (auto& tile : m_tileMap)
+        tile.setColor(sf::Color::White);
+}
+
 inline int Map::indexAt(sf::Vector2f position) const
 {
     return (trunc(position.y) * m_width) + trunc(position.x);

@@ -88,6 +88,7 @@ void Game::mouseEvent()
         } if (button.getType() == button_type_t::RESET && !button.getActive()) {
             button.setString("Start");
             button.setType(button_type_t::START);
+            m_map.reset();
         } if (button.getType() == button_type_t::DIAGONAL)
             m_isDiagonal = button.getActive();
     }
