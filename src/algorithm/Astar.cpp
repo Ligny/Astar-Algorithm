@@ -9,10 +9,6 @@
 Astar::Astar(std::vector<std::vector<Node>> map, Vector2f start, Vector2f end, Vector2f size)
 : m_map(map), m_start(start), m_end(end), m_width(size.first), m_height(size.second)
 {
-    std::cout << "Start : " << m_start.first << " " << m_start.second << std::endl;
-    std::cout << "End : " << m_end.first << " " << m_end.second << std::endl;
-    std::cout << "Width : " << m_width << std::endl;
-    std::cout << "Height : " << m_height << std::endl;
 };
 
 
@@ -31,13 +27,12 @@ bool Astar::isOutOfBounds(Vector2f pos)
     return pos.first < 0 || pos.first >= m_width || pos.second < 0 || pos.second >= m_height;
 };
 
-std::vector<Node> Astar::findPath(int direction_nbr)
+std::vector<Node> Astar::findPath(std::function<float(Vector2f, Vector2f)> heuristic_fct, int direction_nbr)
 {
     m_nbrDirections = direction_nbr;
     int x = m_start.first;
     int y = m_start.second;
     m_map[x][y].m_gCost = 0.0f;
-    std::cout << "pos : " << x << " " << y << std::endl;
     m_map[x][y].m_fCost = 0.0f;
     m_map[x][y].m_hCost = 0.0f;
     m_map[x][y].m_parent = m_start;
@@ -69,7 +64,7 @@ std::vector<Node> Astar::findPath(int direction_nbr)
             float newGCost = current.m_gCost + 1.0f;
             if (newGCost < m_map[newPos.first][newPos.second].m_gCost) {
                 m_map[newPos.first][newPos.second].m_gCost = newGCost;
-                m_map[newPos.first][newPos.second].m_hCost = sqrt(pow(newPos.first - m_end.first, 2) + pow(newPos.second - m_end.second, 2));
+                m_map[newPos.first][newPos.second].m_hCost = heuristic_fct(newPos, m_end);
                 m_map[newPos.first][newPos.second].m_fCost = m_map[newPos.first][newPos.second].m_gCost + m_map[newPos.first][newPos.second].m_hCost;
                 m_map[newPos.first][newPos.second].m_parent = current.m_pos;
                 m_openList.emplace_back(m_map[newPos.first][newPos.second]);
@@ -77,4 +72,14 @@ std::vector<Node> Astar::findPath(int direction_nbr)
         }
     }
     return {};
+}
+
+float heuristic::manhattan(Vector2f start, Vector2f target)
+{
+    return abs(start.first - target.first) + abs(start.second - target.second);
+}
+
+float heuristic::euclidean(Vector2f start, Vector2f target)
+{
+    return sqrt(pow(start.first - target.first, 2) + pow(start.second - target.second, 2));
 }

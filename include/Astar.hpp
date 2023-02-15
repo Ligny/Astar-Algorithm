@@ -19,7 +19,7 @@ class Astar
         bool isFinish(Vector2f pos);
         bool isWalkable(Vector2f pos);
         bool isOutOfBounds(Vector2f pos);
-        std::vector<Node> findPath(int direction_nbr);
+        std::vector<Node> findPath(std::function<float(Vector2f, Vector2f)> heuristic, int direction_nbr);
     private:
         std::uint32_t m_width;
         std::uint32_t m_height;
@@ -33,3 +33,9 @@ class Astar
         };
         std::uint16_t m_nbrDirections = 8;
 };
+
+namespace heuristic
+{
+    float manhattan(Vector2f start, Vector2f target);
+    float euclidean(Vector2f start, Vector2f target);
+}
