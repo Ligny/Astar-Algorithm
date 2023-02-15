@@ -1,10 +1,11 @@
 MAIN	=	src/main.cpp
 
-SRC		=	src/SFML/Game.cpp			\
-			src/SFML/Map.cpp			\
-			src/SFML/Tile.cpp			\
-			src/SFML/Button.cpp		\
-			src/algorithm/Astar.cpp		\
+SRC		=	src/SFML/Game.cpp						\
+			src/SFML/Map.cpp						\
+			src/SFML/Tile.cpp						\
+			src/SFML/components/Button.cpp			\
+			src/SFML/components/TextData.cpp		\
+			src/algorithm/Astar.cpp					\
 
 CFLAGS	=	-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
