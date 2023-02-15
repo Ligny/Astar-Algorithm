@@ -4,7 +4,7 @@
  * @ Description:
  */
 
-#include "../../include/Button.hpp"
+#include "../../../include/Button.hpp"
 #include <iostream>
 
 Button::Button(sf::Text text, sf::Vector2i pos, button_type_t type)
