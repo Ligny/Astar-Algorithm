@@ -14,6 +14,7 @@
 #include "Map.hpp"
 #include "Astar.hpp"
 #include "Button.hpp"
+#include "TextData.hpp"
 
 class Game
 {
@@ -21,7 +22,6 @@ class Game
         Game(int width, int height, const std::string& title, std::uint16_t tileSize);
 
         void run(sf::Vector2f start, sf::Vector2f target);
-    
     private:
         void display();
 
@@ -39,5 +39,8 @@ class Game
 
         sf::Font m_font;
         std::vector<Button> m_buttons;
+        TextData m_textStart;
+        TextData m_textTarget;
+
         bool m_isDiagonal;
 };

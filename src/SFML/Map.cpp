@@ -38,6 +38,8 @@ void Map::reset()
 {
     for (auto& tile : m_tileMap)
         tile.setColor(sf::Color::White);
+    setStart({m_start.getPosition().x / m_tileSize, m_start.getPosition().y / m_tileSize}, sf::Color::Green);
+    setTarget({m_target.getPosition().x / m_tileSize, m_target.getPosition().y / m_tileSize}, sf::Color::Red);
 }
 
 inline int Map::indexAt(sf::Vector2f position) const
