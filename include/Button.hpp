@@ -13,6 +13,8 @@ typedef enum button_type {
     DIAGONAL,
     START,
     RESET,
+    EUCLIDIAN,
+    MANHATTAN,
 } button_type_t;
 
 class Button : public sf::Drawable, public sf::Transformable

@@ -19,10 +19,13 @@ void Game::setUp(sf::Vector2f start, sf::Vector2f target)
     m_map.setStart(start, sf::Color::Green);
     m_map.setTarget(target, sf::Color::Red);
 
+    m_textStart = TextData(sf::Text("Start", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 50, 500}, sf::Color::Green);
+    m_textTarget = TextData(sf::Text("Target", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 50, 600}, sf::Color::Red);
     if (!m_font.loadFromFile("ressources/Sansation.ttf"))
         std::cout << "Error loading font" << std::endl;
 
     m_buttons.push_back(Button(sf::Text("Diagonal", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 75, 70}, button_type_t::DIAGONAL));
+    m_buttons.push_back(Button(sf::Text("Euclidian", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 75, 210}, button_type_t::EUCLIDIAN));
     m_buttons.push_back(Button(sf::Text("Start", m_font), {(int)(m_map.getWidth() * m_map.getTileSize()) + 75, 350}, button_type_t::START));
 }
 
@@ -39,16 +42,10 @@ void Game::display()
 {
     m_window.clear();
     m_window.draw(m_map);
-    std::string pos = "Start\nx: " + std::to_string((int)m_map.getStart().getPosition().x / m_map.getTileSize()) + " y: " + std::to_string((int)m_map.getStart().getPosition().y / m_map.getTileSize());
-    sf::Text tot(pos, m_font);
-    tot.setFillColor(sf::Color::Green);
-    tot.setPosition((m_map.getWidth() * m_map.getTileSize()) + 50, 500);
-    std::string pos1 = "Target\nx: " + std::to_string((int)m_map.getTarget().getPosition().x / m_map.getTileSize()) + " y: " + std::to_string((int)m_map.getTarget().getPosition().y / m_map.getTileSize());
-    sf::Text tat(pos1, m_font);
-    tat.setFillColor(sf::Color::Red);
-    tat.setPosition((m_map.getWidth() * m_map.getTileSize()) + 50, 600);
-    m_window.draw(tot);
-    m_window.draw(tat);
+    m_textStart.setString("Start\nx: " + std::to_string((int)m_map.getStart().getPosition().x / m_map.getTileSize()) + " y: " + std::to_string((int)m_map.getStart().getPosition().y / m_map.getTileSize()));
+    m_textTarget.setString("Target\nx: " + std::to_string((int)m_map.getTarget().getPosition().x / m_map.getTileSize()) + " y: " + std::to_string((int)m_map.getTarget().getPosition().y / m_map.getTileSize()));
+    m_window.draw(m_textStart);
+    m_window.draw(m_textTarget);
     for (auto& button : m_buttons)
         m_window.draw(button);
     m_window.display();
@@ -62,7 +59,7 @@ void Game::launchAlgorithm()
         {m_map.getTarget().getPosition().x / m_map.getTileSize(), m_map.getTarget().getPosition().y / m_map.getTileSize()},
         {m_map.getWidth(), m_map.getHeight()}
     );
-    auto res = astar.findPath((m_isDiagonal) ? 8 : 4);
+    auto res = astar.findPath(heuristic::euclidean, (m_isDiagonal) ? 8 : 4);
     if (res.empty()) {
         std::cout << "Path not found" << std::endl;
     } else {
@@ -73,6 +70,7 @@ void Game::launchAlgorithm()
     }
 }
 
+// need to rework ------ TOO LONG FUNCTION ------
 void Game::mouseEvent()
 {
     auto position = sf::Mouse::getPosition(m_window);
@@ -89,6 +87,12 @@ void Game::mouseEvent()
             button.setString("Start");
             button.setType(button_type_t::START);
             m_map.reset();
+        } if (button.getType() == button_type_t::EUCLIDIAN && button.getActive()) {
+            button.setString("Manhattan");
+            button.setType(button_type_t::MANHATTAN);
+        } if (button.getType() == button_type_t::MANHATTAN && !button.getActive()) {
+            button.setString("Euclidian");
+            button.setType(button_type_t::EUCLIDIAN);
         } if (button.getType() == button_type_t::DIAGONAL)
             m_isDiagonal = button.getActive();
     }
