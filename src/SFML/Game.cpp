@@ -6,6 +6,7 @@
 
 #include "../../include/Game.hpp"
 #include <SFML/Window.hpp>
+#include <algorithm>
 
 Game::Game(int width, int height, const std::string& title, std::uint16_t tileSize)
     : m_window(sf::VideoMode((width * tileSize) + 300, height * tileSize), title),
@@ -51,6 +52,8 @@ void Game::display()
     m_window.display();
 }
 
+
+// BUG only sqare map segfault otherwise
 void Game::launchAlgorithm()
 {
     Astar astar(
@@ -60,12 +63,15 @@ void Game::launchAlgorithm()
         {m_map.getWidth(), m_map.getHeight()}
     );
     auto res = astar.findPath(heuristic::euclidean, (m_isDiagonal) ? 8 : 4);
+    std::reverse(res.begin(), res.end());
     if (res.empty()) {
         std::cout << "Path not found" << std::endl;
     } else {
         std::cout << "Path found" << std::endl;
         for (auto& node : res) {
-            std::cout << node.m_pos.first << " " << node.m_pos.second << std::endl;
+            if (node.m_pos == res.front().m_pos || node.m_pos == res.back().m_pos)
+                continue;
+            m_map[{(float)node.m_pos.first, (float)node.m_pos.second}].setColor(sf::Color::Yellow);
         }
     }
 }
@@ -112,7 +118,7 @@ std::vector<std::vector<Node>> Game::makeProtoMap(const int width, const int hei
     for (auto y = 0; y < height; y++) {
         std::vector<Node> row;
         for (auto x = 0; x < width; x++) {
-            row.push_back(Node({x, y}, {-1, -1}, __FLT_MAX__, true));
+            row.push_back(Node({x, y}, {-1, -1}, __FLT_MAX__, m_map[{(float)x, (float)y}].getColor() != sf::Color::Black));
         }
         map.push_back(row);
     }

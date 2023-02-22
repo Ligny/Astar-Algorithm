@@ -47,6 +47,7 @@ std::vector<Node> Astar::findPath(std::function<float(Vector2f, Vector2f)> heuri
         if (isFinish(current.m_pos)) {
             std::vector<Node> path;
             while (current.m_pos != m_start) {
+                std::cout << current.m_parent.first << std::endl;
                 path.emplace_back(current);
                 current = m_map[current.m_parent.first][current.m_parent.second];
             }
