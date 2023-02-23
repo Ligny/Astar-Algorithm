@@ -1,4 +1,4 @@
-# A-star
+# Astar-Algorithm
 
 This project is a simple graphics **A-star** search algorithm implementation.
 
