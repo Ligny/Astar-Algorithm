@@ -32,9 +32,9 @@ In my version of the Astar algorithm, I let you decide if you allow diagonals.
 
 this repository is divided into two folders, the graphic and algorithmic part which are independent of each other.
 
-[Algorithmic](main/src/algorithm)
+[Algorithmic](src/algorithm)
 
-[Graphic SFML](main/src/SFML)
+[Graphic SFML](src/SFML)
 
 ## Getting Started
 
