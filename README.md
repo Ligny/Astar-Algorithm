@@ -2,6 +2,8 @@
 
 This project is a simple graphics **A-star** search algorithm implementation.
 
+![This is an image](https://github.com/Ligny/A-star/blob/main/ressources/images/Astar_menu.png)
+
 ## Description
 
 A*, A-star or Astar is a pathfinding algorithm that find the shortest path between two points.
@@ -26,6 +28,14 @@ In my version of the Astar algorithm, I let you decide if you allow diagonals.
 
 > 8 directions: North, North East, East, South East, South, South West, West, North West
 
+## Architecture
+
+this repository is divided into two folders, the graphic and algorithmic part which are independent of each other.
+
+[Algorithmic](main/src/algorithm)
+
+[Graphic SFML](main/src/SFML)
+
 ## Getting Started
 
 ### Dependencies
@@ -35,7 +45,65 @@ In my version of the Astar algorithm, I let you decide if you allow diagonals.
 
 ### Executing program
 
+1. **Compile all cpp files with Makefile:**
+> create `astar` executable
+````
+make
+````
+2. **Launch:**
+> launch Astar Window with default 32 18 **Grid size**
+````
+./astar
+````
+> launch Astar Window with x y **Grid size**
+````
+./astar x y
+````
 
+## How to use
 
+### On Grid
+
+Set **BLOCK**: click on Tile
+
+Set new **START**: press key ``s`` on the new start tile
+> Default start `x = 0, y = 0`
+
+Set new **TARGET**: press key ``t`` on the new target tile
+> Default target `x = 12,  y = 15` or with args `x = 1, y = 0`
+
+### Button
+
+**Diagonal**: set diagonal
+> Default `Diagonal = false`
+
+**Manhattan/Euclidian**: set heuristic function
+> Default `Euclidian`
+
+**Start/Reset**: Start Algorithm
+
+![This is an image](https://github.com/Ligny/A-star/blob/main/ressources/images/Astar_manhattan.png)
+
+## Help
+
+### Makefile Error
+
+#### SFML Error
+> [here](#dependencies)
+
+#### Other
+Also exist rules: `make re`, `make clean`, `make fclean`
+> `make re`    : recompile (make fclean + make)<br />
+> `make clean` : delete *.o<br />
+> `make fclean`: delete *.o && executable<br />
+
+### Execution Error
+
+#### Arguments Error
+````
+❯ ERROR: Please read the README
+````
+> [here](#executing-program)
+
+##
 ![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)
-
