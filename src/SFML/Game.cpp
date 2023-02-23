@@ -58,12 +58,11 @@ void Game::launchAlgorithm()
 {
     Astar astar(
         makeProtoMap(m_map.getWidth(), m_map.getHeight()),
-        {m_map.getStart().getPosition().x / m_map.getTileSize(), m_map.getStart().getPosition().y / m_map.getTileSize()},
-        {m_map.getTarget().getPosition().x / m_map.getTileSize(), m_map.getTarget().getPosition().y / m_map.getTileSize()},
+        {m_map.getStart().getPosition().y / m_map.getTileSize(), m_map.getStart().getPosition().x / m_map.getTileSize()},
+        {m_map.getTarget().getPosition().y / m_map.getTileSize(), m_map.getTarget().getPosition().x / m_map.getTileSize()},
         {m_map.getWidth(), m_map.getHeight()}
     );
     auto res = astar.findPath(heuristic::euclidean, (m_isDiagonal) ? 8 : 4);
-    std::reverse(res.begin(), res.end());
     if (res.empty()) {
         std::cout << "Path not found" << std::endl;
     } else {

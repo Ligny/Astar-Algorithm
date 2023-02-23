@@ -16,6 +16,11 @@ struct Node
     Node(Vector2f pos, Vector2f parent, float cost, bool walkable)
         : m_pos(pos), m_parent(parent), m_gCost(cost), m_hCost(cost), m_fCost(cost), isWalkable(walkable)
     {
+    };
+
+    bool operator==(const Node &other) const
+    {
+        return m_pos.first == other.m_pos.first && m_pos.second == other.m_pos.second;
     }
 
     Vector2f m_pos;

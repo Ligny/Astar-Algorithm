@@ -8,6 +8,7 @@
 
 #include <queue>
 #include <math.h>
+#include <array>
 
 #include "../include/Node.hpp"
 
@@ -25,13 +26,11 @@ class Astar
         std::uint32_t m_height;
         std::vector<std::vector<Node>> m_map;
         std::vector<Node> m_openList;
+        std::vector<Node> m_closedList;
         Vector2f m_start;
         Vector2f m_end;
-        std::vector<Vector2f> m_directions = {
-            {0, -1}, {1, 0}, {0, 1}, {-1, 0},
-            {-1, -1}, {1, -1}, {1, 1}, {-1, 1}
-        };
-        std::uint16_t m_nbrDirections = 8;
+        std::array<Vector2f, 8> m_directions;
+        std::uint16_t m_nbrDirections;
 };
 
 namespace heuristic
